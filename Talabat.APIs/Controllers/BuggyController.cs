@@ -42,7 +42,7 @@ namespace Talabat.APIs.Controllers
         }
 
         [HttpGet("badrequest/{id}")]
-        public ActionResult GetValidationError(int id)
+        public ActionResult GetBadRequest(int id)
         {
             return Ok();
         }
