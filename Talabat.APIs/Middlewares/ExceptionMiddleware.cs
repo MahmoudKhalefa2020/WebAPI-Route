@@ -1,6 +1,4 @@
-﻿
-
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
 using Talabat.APIs.Errors;
 
@@ -21,6 +19,7 @@ namespace Talabat.APIs.Middlewares
             _env = env;
         }
 
+        #region By convension
         public async Task InvokeAsync(HttpContext httpContext)
         {
             try
@@ -44,5 +43,30 @@ namespace Talabat.APIs.Middlewares
 
             }
         }
+        #endregion
+
+        //public async Task InvokeAsync(HttpContext httpContext, RequestDelegate next)
+        //{
+        //    try
+        //    {
+        //        await _next.Invoke(httpContext);
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        _logger.LogError(ex.Message);
+        //        httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        //        httpContext.Response.ContentType = "application/json";
+
+        //        var resonse = _env.IsDevelopment() ? new ApiExceptionsResponse((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
+        //            : new ApiExceptionsResponse((int)HttpStatusCode.InternalServerError);
+
+        //        var json = JsonSerializer.Serialize(resonse);
+
+        //        await httpContext.Response.WriteAsync(json);
+
+
+        //    }
+        //}
     }
 }
