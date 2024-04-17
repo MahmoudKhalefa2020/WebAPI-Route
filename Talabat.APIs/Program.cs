@@ -1,10 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Talabat.APIs.Errors;
-using Talabat.APIs.Helpers;
+using Talabat.APIs.Extensions;
 using Talabat.APIs.Middlewares;
-using Talabat.Core.Repositories;
-using Talabat.Repository;
 using Talabat.Repository.Data;
 
 namespace Talabat.APIs
@@ -27,34 +23,14 @@ namespace Talabat.APIs
 
 
             });
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            //builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
-            builder.Services.AddAutoMapper(typeof(MappingProfiles));
-            builder.Services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = (actionContext) =>
-                {
-                    var errors = actionContext.ModelState.Where(p => p.Value.Errors.Count() > 0)
-                                                         .SelectMany(p => p.Value.Errors)
-                                                         .Select(E => E.ErrorMessage)
-                                                         .ToArray();
 
-
-                    var reponse = new ApiValidationErrorResponse()
-                    {
-                        Errors = errors
-                    };
-                    return new BadRequestObjectResult(reponse);
-                };
-            });
-
+            builder.Services.AddApplicationService();
 
 
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwggerExtensions();
 
             var app = builder.Build();
 
@@ -85,8 +61,7 @@ namespace Talabat.APIs
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerMiddleware();
 
             }
 
